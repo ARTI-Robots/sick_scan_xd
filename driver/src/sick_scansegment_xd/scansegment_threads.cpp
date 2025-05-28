@@ -68,7 +68,7 @@
 /*
  * @brief Initializes and runs all threads to receive, convert and publish scan data for the sick 3D lidar multiScan136.
  */
-int sick_scansegment_xd::run(rosNodePtr node, const std::string& scannerName)
+int sick_scansegment_xd::run(lifecycleNodePtr node, const std::string& scannerName)
 {
     // sick_scansegment_xd configuration
     setDiagnosticStatus(SICK_DIAGNOSTIC_STATUS::INIT, "sick_scan_xd initializing " + scannerName);
@@ -187,7 +187,7 @@ bool sick_scansegment_xd::MsgPackThreads::runThreadCb(void)
     }
 
     // (Re-)initialize and run loop
-    while(m_run_scansegment_thread && rosOk())
+    while(m_run_scansegment_thread && rclcpp::ok())
     {
         ROS_INFO_STREAM("sick_scansegment_xd initializing...");
 

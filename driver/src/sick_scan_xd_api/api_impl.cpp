@@ -13,6 +13,8 @@
 #include "sick_scan/sick_generic_callback.h"
 #include "sick_scan/sick_scan_logging.h"
 
+using rosNodePtr = std::shared_ptr<rclcpp_lifecycle::LifecycleNode>;
+
 template <typename HandleType, class MsgType> std::list<sick_scan_xd::SickWaitForMessageHandler<HandleType, MsgType>*> sick_scan_xd::SickWaitForMessageHandler<HandleType, MsgType>::s_wait_for_message_handler_list;
 template <typename HandleType, class MsgType> std::mutex sick_scan_xd::SickWaitForMessageHandler<HandleType, MsgType>::s_wait_for_message_handler_mutex;
 
@@ -642,7 +644,7 @@ SickScanApiHandle SickScanApiCreate(int argc, char** argv)
         rclcpp::init(argc, argv);
         rclcpp::NodeOptions node_options;
         node_options.allow_undeclared_parameters(true);
-        rosNodePtr node = rclcpp::Node::make_shared("sick_scan", "", node_options);
+        rosNodePtr node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("sick_scan", "", node_options);
         SickScanApiHandle apiHandle = castNodeToApiHandle(node);
         #else
         ros::init(argc, argv, s_scannerName, ros::init_options::NoSigintHandler);
