@@ -21,6 +21,8 @@ public:
 private:
   sick_scansegment_xd::Config config_;
   std::unique_ptr<sick_scansegment_xd::MsgPackThreads> msgpack_threads_;
+  rclcpp::Client<sick_scan_xd::srv::ColaMsgSrv>::SharedPtr cola_client_;
+  bool send_sopas_command(const std::string & command);
 };
 
 #endif // SICK_SCANSEGMENT_LIFECYCLE_NODE_HPP
