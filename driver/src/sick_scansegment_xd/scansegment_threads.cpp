@@ -385,6 +385,7 @@ bool sick_scansegment_xd::MsgPackThreads::runThreadCb(void)
         {
             std::cout << "sick_scansegment_xd exit: sending stop commands..." << std::endl;
             sopas_service->sendAuthorization();//(m_config.client_authorization_pw);
+            sopas_service->stopLaser();
             sopas_service->sendMultiScanStopCmd(m_config.imu_enable);
             std::cout << "sick_scansegment_xd exit: stop commands sent." << std::endl;
         }

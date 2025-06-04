@@ -368,6 +368,25 @@ bool sick_scan_xd::SickScanServices::sendAuthorization()
   return true;
 }
 
+bool sick_scan_xd::SickScanServices::stopLaser()
+{
+
+  std::string sopasCmd = std::string("sMN LMCstopmeas");
+  std::vector<unsigned char> sopasReplyBin;
+  std::string sopasReplyString;
+
+  if(!sendSopasAndCheckAnswer(sopasCmd, sopasReplyBin, sopasReplyString))
+  {
+    ROS_ERROR_STREAM("## ERROR SickScanServices::sendSopasAndCheckAnswer failed on sending command\"" << sopasCmd << "\"");
+    return false;
+  }
+
+  ROS_INFO_STREAM("SickScanServices: request: \"" << sopasCmd << "\"");
+  ROS_INFO_STREAM("SickScanServices: response: \"" << sopasReplyString << "\"");
+
+  return true;
+}
+
 /*!
  * Sends the SOPAS command "sMN Run", which applies previous send settings
  */
