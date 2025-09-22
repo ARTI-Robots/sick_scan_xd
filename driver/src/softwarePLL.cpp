@@ -115,6 +115,11 @@ int SoftwarePLL::findDiffInFifo(double diff, double tol)
   return (numFnd);
 }
 
+void SoftwarePLL::disableCorrection()
+{
+  correctionDisabled = false;
+}
+
 /*!
 \brief Updates PLL internale State should be called only with network send timestamps
 
@@ -184,14 +189,23 @@ bool SoftwarePLL::updatePLL(uint32_t sec, uint32_t nanoSec, uint32_t curtick)
 //TODO Kommentare
 bool SoftwarePLL::getCorrectedTimeStamp(uint32_t &sec, uint32_t &nanoSec, uint32_t curtick)
 {
-  if (IsInitialized() == false)
+  if ((IsInitialized() == false) && (correctionDisabled == false))
   {
     return (false);
   }
 
-  double relTimeStamp = extraPolateRelativeTimeStamp(curtick); // evtl. hier wg. Ueberlauf noch einmal pruefen
-  double corrTime = relTimeStamp + this->FirstTimeStamp();
-  sec = (uint32_t) corrTime;
+  double corrTime;
+  if (correctionDisabled)
+  {
+    double relTimeStamp = extraPolateRelativeTimeStamp(curtick); // evtl. hier wg. Ueberlauf noch einmal pruefen
+    corrTime = relTimeStamp + this->FirstTimeStamp();
+  }
+  else
+  {
+    corrTime = static_cast<double>(curtick);
+  }
+
+  sec = static_cast<uint32_t>(corrTime);
   double frac = corrTime - sec;
   nanoSec = (uint32_t) (1E9 * frac);
   return (true);

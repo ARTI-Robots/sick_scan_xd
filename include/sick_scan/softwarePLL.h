@@ -81,6 +81,8 @@ public:
 
   int findDiffInFifo(double diff, double tol);
 
+  void disableCorrection();
+
   static const int fifoSize = 7;
   size_t packets_dropped = 0;    // just for printing statusmessages when dropping packets
   size_t packets_received = 0;   // just for printing statusmessages when dropping packets
@@ -105,6 +107,7 @@ private:
   uint32_t mostRecentNanoSec;
   double mostRecentTimeStamp;
   double interpolationSlope;
+  bool correctionDisabled;
 
   bool nearSameTimeStamp(double relTimeStamp1, double relTimeStamp2, double& delta_time_abs);
 
@@ -117,6 +120,7 @@ private:
     AllowedTimeDeviation(SoftwarePLL::MaxAllowedTimeDeviation); // 1 ms
     numberValInFifo = 0;
     isInitialized = false;
+    correctionDisabled = false;
   }
 
   // verhindert, dass ein Objekt von au�erhalb von N erzeugt wird.
