@@ -335,6 +335,7 @@ bool sick_scansegment_xd::Config::Init(rosNodePtr _node)
     std::string str_laserscan_layer_filter = "0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0";
     ROS_DECL_GET_PARAMETER(node, "laserscan_layer_filter", str_laserscan_layer_filter);
     sick_scansegment_xd::util::parseVector(str_laserscan_layer_filter, laserscan_layer_filter);
+    ROS_DECL_GET_PARAMETER(node, "use_pll_correction", use_pll_correction);
 
     if (imu_enable && scandataformat != 2)
     {
