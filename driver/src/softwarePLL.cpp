@@ -90,9 +90,13 @@ bool SoftwarePLL::pushIntoFifo(double curTimeStamp, uint32_t curtick)
 
 double SoftwarePLL::extraPolateRelativeTimeStamp(uint32_t tick)
 {
-  int32_t tempTick = 0;
-  tempTick = tick - (uint32_t) (0xFFFFFFFF & FirstTick());
-  double timeDiff = tempTick * this->InterpolationSlope();
+  int32_t tempTick = tick - (uint32_t) (0xFFFFFFFF & FirstTick());
+  double tick_scaling = 1.0;
+  if (!correctionDisabled)
+  {
+    tick_scaling = this->InterpolationSlope();
+  }
+  double timeDiff = tempTick * tick_scaling;
   return (timeDiff);
 
 }
@@ -116,6 +120,11 @@ int SoftwarePLL::findDiffInFifo(double diff, double tol)
 }
 
 void SoftwarePLL::disableCorrection()
+{
+  correctionDisabled = true;
+}
+
+void SoftwarePLL::enableCorrection()
 {
   correctionDisabled = false;
 }
@@ -193,17 +202,8 @@ bool SoftwarePLL::getCorrectedTimeStamp(uint32_t &sec, uint32_t &nanoSec, uint32
   {
     return (false);
   }
-
-  double corrTime;
-  if (correctionDisabled)
-  {
-    double relTimeStamp = extraPolateRelativeTimeStamp(curtick); // evtl. hier wg. Ueberlauf noch einmal pruefen
-    corrTime = relTimeStamp + this->FirstTimeStamp();
-  }
-  else
-  {
-    corrTime = static_cast<double>(curtick);
-  }
+  double relTimeStamp = extraPolateRelativeTimeStamp(curtick); // evtl. hier wg. Ueberlauf noch einmal pruefen
+  double corrTime = relTimeStamp + this->FirstTimeStamp();
 
   sec = static_cast<uint32_t>(corrTime);
   double frac = corrTime - sec;

@@ -83,6 +83,8 @@ public:
 
   void disableCorrection();
 
+  void enableCorrection();
+
   static const int fifoSize = 7;
   size_t packets_dropped = 0;    // just for printing statusmessages when dropping packets
   size_t packets_received = 0;   // just for printing statusmessages when dropping packets
