@@ -203,7 +203,7 @@ sick_scansegment_xd::Config::Config()
     // Default is "0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0", i.e. laserscan messages for layer 5, (elevation -0.07 degree, max number of scan points)
     laserscan_layer_filter = { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    use_pll_correction = false;
+    use_pll_correction = true; // default True, Defines whether the pll correction should be applied to correct the header timestamp
 }
 
 /*
