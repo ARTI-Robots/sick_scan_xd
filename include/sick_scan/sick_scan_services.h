@@ -91,6 +91,8 @@ namespace sick_scan_xd
      */
     bool sendSopasCmdCheckResponse(const std::string& sopas_request, const std::string& expected_response);
 
+    bool stopLaser();
+
     /*!
      * Callback for service ColaMsg (ColaMsg, send a cola message to lidar).
      * @param[in] service_request ros service request to lidar

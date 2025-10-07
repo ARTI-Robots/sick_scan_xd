@@ -74,6 +74,8 @@
 #include "sick_scan/sick_generic_laser.h"
 #include "sick_scan/dataDumper.h"
 #include "sick_scan/helper/angle_compensator.h"
+#include "sick_scan/sick_scansegment_lifecycle_node.hpp"
+#include <rclcpp/executors/multi_threaded_executor.hpp>
 
 #define MAX_NAME_LEN (1024)
 
@@ -147,7 +149,7 @@ int main(int argc, char** argv)
     rclcpp::NodeOptions node_options;
     node_options.allow_undeclared_parameters(true);
     //node_options.automatically_declare_initial_parameters(true);
-    rosNodePtr node = rclcpp::Node::make_shared("sick_scan", "", node_options);
+    rosNodePtr node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("sick_scan", "", node_options);
 #else
   ros::init(argc, argv, scannerName, ros::init_options::NoSigintHandler);  // scannerName holds the node-name
   // signal(SIGINT, rosSignalHandler);

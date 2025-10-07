@@ -63,7 +63,7 @@ namespace sick_scansegment_xd
     /*
 	 * @brief Initializes and runs all threads to receive, convert and publish scan data for the sick 3D lidar multiScan136.
 	 */
-    int run(rosNodePtr node, const std::string& scannerName);
+    int run(lifecycleNodePtr node, const std::string& scannerName);
 
     /*
 	 * @brief class MsgPackThreads runs all threads to receive, convert and publish scan data for the sick 3D lidar multiScan136.

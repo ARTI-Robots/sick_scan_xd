@@ -353,7 +353,7 @@ bool sick_scansegment_xd::Config::Init(int argc, char** argv)
     rclcpp::init(argc, argv);
     rclcpp::NodeOptions node_options;
     node_options.allow_undeclared_parameters(true);
-    node = rclcpp::Node::make_shared("sick_scansegment_xd", "", node_options);
+    node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("sick_scansegment_xd", "", node_options);
     Init(node);
     #elif defined __ROS_VERSION && __ROS_VERSION > 0
     ros::init(argc, argv, "sick_scansegment_xd");

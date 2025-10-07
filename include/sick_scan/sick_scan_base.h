@@ -58,6 +58,8 @@
 #ifndef SICK_SCAN_BASE_H_INCLUDED
 #define SICK_SCAN_BASE_H_INCLUDED
 #ifdef  __cplusplus
+#include <memory>  
+#include <rclcpp_lifecycle/lifecycle_node.hpp>  
 
 #if !defined __ROS_VERSION || __ROS_VERSION == 0
 // On native Linux or Windows, namespace ros was previously used by roswrapper functions
@@ -70,6 +72,6 @@ namespace roswrap {}
 namespace ros = roswrap;
 #endif // __ROS_VERSION == 0
 
-
+using lifecycleNodePtr = std::shared_ptr<rclcpp_lifecycle::LifecycleNode>;
 #endif // __cplusplus
 #endif // SICK_SCAN_BASE_H_INCLUDED

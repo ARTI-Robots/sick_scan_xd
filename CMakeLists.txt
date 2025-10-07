@@ -251,6 +251,10 @@ if(ROS_VERSION EQUAL 2)
     find_package(tf2 REQUIRED)
     find_package(tf2_ros REQUIRED)
     find_package(visualization_msgs REQUIRED)
+    find_package(rclcpp_lifecycle)
+    find_package(rclcpp)
+    find_package(lifecycle_msgs)
+    find_package(rclcpp_components REQUIRED)
     if(${ENABLE_EMULATOR} OR ENABLE_EMULATOR EQUAL ON)
         set(ROSIDL_EMULATOR_FILES
             # emulator messages
@@ -513,6 +517,7 @@ if(ROS_VERSION EQUAL 1)
         driver/src/sick_generic_monitoring.cpp
         driver/src/sick_generic_parser.cpp
         driver/src/sick_generic_radar.cpp
+        driver/src/sick_scansegment_lifecycle_node.cpp
         driver/src/sick_lmd_scandata_parser.cpp
         driver/src/sick_scan_common.cpp
         driver/src/sick_scan_common_nw.cpp
@@ -615,6 +620,7 @@ else() # i.e. (ROS_VERSION EQUAL 0 OR ROS_VERSION EQUAL 2)
         driver/src/sick_generic_monitoring.cpp
         driver/src/sick_generic_parser.cpp
         driver/src/sick_generic_radar.cpp
+        driver/src/sick_scansegment_lifecycle_node.cpp
         driver/src/sick_lmd_scandata_parser.cpp
         driver/src/sick_scan_common.cpp
         driver/src/sick_scan_common_nw.cpp
@@ -656,6 +662,7 @@ else() # i.e. (ROS_VERSION EQUAL 0 OR ROS_VERSION EQUAL 2)
         target_link_libraries(${PROJECT_NAME}_shared_lib ${SICK_LDMRS_LIBRARIES})
     endif()
     add_executable(sick_generic_caller driver/src/sick_generic_caller.cpp)
+    add_executable(sick_scansegment_lifecycle_node driver/src/sick_scansegment_lifecycle_node.cpp)
     target_link_libraries(sick_generic_caller ${PROJECT_NAME}_lib ${SICK_LDMRS_LIBRARIES})
 
 endif()
@@ -665,6 +672,9 @@ if(ROS_VERSION EQUAL 2)
     ament_target_dependencies(
         ${PROJECT_NAME}_lib
         "rclcpp"
+        "rclcpp_lifecycle"
+        "lifecycle_msgs"
+        "rclcpp_components" 
         "sensor_msgs"
         "std_msgs"
         "geometry_msgs"
@@ -679,6 +689,9 @@ if(ROS_VERSION EQUAL 2)
     ament_target_dependencies(
         ${PROJECT_NAME}_shared_lib
         "rclcpp"
+        "rclcpp_lifecycle"
+        "lifecycle_msgs"
+        "rclcpp_components" 
         "sensor_msgs"
         "std_msgs"
         "geometry_msgs"
@@ -693,6 +706,9 @@ if(ROS_VERSION EQUAL 2)
     ament_target_dependencies(
         sick_generic_caller
         "rclcpp"
+        "rclcpp_lifecycle"
+        "lifecycle_msgs"
+        "rclcpp_components" 
         "sensor_msgs"
         "std_msgs"
         "geometry_msgs"
@@ -703,6 +719,30 @@ if(ROS_VERSION EQUAL 2)
         "${diagnostic_updater_pkg}"
         ${LDMRS_TARGET_DEPENDENCIES}
     )
+
+    ament_target_dependencies(sick_scansegment_lifecycle_node
+        rclcpp
+        rclcpp_lifecycle
+        rclcpp_components
+        lifecycle_msgs
+        sensor_msgs
+        std_msgs
+        geometry_msgs
+        diagnostic_msgs
+        nav_msgs
+        visualization_msgs
+        tf2_ros
+    )
+
+    target_link_libraries(sick_scansegment_lifecycle_node
+        ${PROJECT_NAME}_lib
+    )
+
+    install(TARGETS sick_scansegment_lifecycle_node
+        DESTINATION lib/${PROJECT_NAME}
+    )
+
+
 
     if(WIN32 OR EXISTS "/opt/ros/eloquent" OR EXISTS "/opt/ros/foxy" OR EXISTS "/opt/ros/galactic") # rosidl_typesupport for ROS2 eloquent, foxy, galaxy
         rosidl_target_interfaces(${PROJECT_NAME}_lib ${PROJECT_NAME} "rosidl_typesupport_c")
