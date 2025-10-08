@@ -31,7 +31,19 @@ public:
 
   bool pushIntoFifo(double curTimeStamp, uint32_t curtick);// update tick fifo and update clock (timestamp) fifo;
   double extraPolateRelativeTimeStamp(uint32_t tick);
+  double convertToRelativeTimeStamp(uint32_t tick);
 
+  /**
+   * \brief returns a timestamp which was corrected
+   *
+   *  Either performs a correction or just splits the ticks into seconds and nano-seconds
+   *  if the correctionDisabled is set
+   *
+   * @param sec the resulting seconds after splitting the ticks
+   * @param nanoSec the resulting nano-seconds after performing the split of the ticks
+   * @param tick the ticks used to encode the time of the measurement
+   * @return true iff the ticks have been converted to seconds and nano-seconds
+   */
   bool getCorrectedTimeStamp(uint32_t &sec, uint32_t &nanoSec, uint32_t tick);
 
   bool convSystemtimeToLidarTimestamp(uint32_t systemtime_sec, uint32_t systemtime_nanosec, uint32_t& tick);
